@@ -1,0 +1,29 @@
+= javascript_include_tag "http://d3js.org/d3.v3.min.js"
+= stylesheet_link_tag "http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+= javascript_include_tag "http://code.jquery.com/jquery-1.9.1.js"
+= javascript_include_tag "http://code.jquery.com/ui/1.10.3/jquery-ui.js"
+= javascript_include_tag "/javascripts/d3_ischrones.js"
+#slider-vertical{style: "width: 250px;float: left; margin: 8px 0;"}
+%span#slider-value{style: "float:left;margin:5px;padding-left:10px"}
+#isochrone-container
+:javascript
+  var masses = ["0.7", "0.8", "0.9", "1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0", "2.1", "2.2", "2.3", "2.4", "2.5", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0", "8.3", "9.0", "9.5", "10.0", "12.0", "15.0", "20.0", "30.0", "50.0", "70.0", "100.0"]; 
+  var data = #{@data.to_json};
+
+  stellarLife([data["sm-1.1"]["data"]], data["sm-1.1"]["temps"]);
+  $( "#slider-vertical" ).slider({
+    orientation: "horizontal",
+    range: "min",
+    min: 1,
+    max: 36,
+    step: 1,
+    value: 5,
+    slide: function( event, ui ) {
+      var mass = masses[ui.value - 1];
+      updateAll([data["sm-"+mass]["data"]], data["sm-"+mass]["temps"]);
+      $( "#slider-value" ).html(mass + " M☉");
+    }
+  });
+  var value = $( "#slider-vertical" ).slider( "option", "value" );
+   $( "#slider-value" ).html(masses[value-1] + " M☉");
+  
